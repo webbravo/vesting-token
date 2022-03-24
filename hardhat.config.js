@@ -3,6 +3,8 @@ const { task } = require("hardhat/config");
 require("@nomiclabs/hardhat-waffle");
 require("@nomiclabs/hardhat-web3");
 
+const { API_URL, PRIVATE_KEY } = process.env;
+
 task("balance", "Prints an account's balance")
   .addParam("account", "The account's address")
   .setAction(async (taskArgs) => {
