@@ -18,8 +18,8 @@ contract StakeToken is Ownable, ERC20 {
     // Set the Threshold Period for withdrawal
     uint256 public thresholdTime = 1 * 24 * 60 * 60 * 7;
 
-    // Set the Threshold Period for withdrawal
-    ufixed8x2 public rewardsPercent = 1 / 100;
+    // Set the Reward percentage 1%
+    uint256 public a1 = 1;
 
     // Declare new Stake struct
     struct Stake {
@@ -27,14 +27,11 @@ contract StakeToken is Ownable, ERC20 {
         uint256 createdTimestamp;
     }
 
-    /**
-     * @notice We usually require to know who are all the stakeholders.
-     */
+    /** We usually require to know who are all the stakeholders.*/
     mapping(address => Stake) public stakeholders;
 
-    /**
-     * @notice The accumulated rewards for each stakeholder.
-     */
+    // The accumulated rewards for each stakeholder.
+
     mapping(address => uint256) internal rewards;
 
     constructor() ERC20("StakeToken", "STN") {
@@ -172,6 +169,6 @@ contract StakeToken is Ownable, ERC20 {
         // Require that the Stakeholder balance is greater 0
         require(balance > 0, "Stakeholder balance is negative");
 
-        return uint256(rewardsPercent) * balance;
+        return balance * (a1.div(100));
     }
 }
