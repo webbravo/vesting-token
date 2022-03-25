@@ -34,13 +34,13 @@ contract StakeToken is Ownable, ERC20 {
 
     mapping(address => uint256) internal rewards;
 
-    constructor() ERC20("StakeToken", "STN") {
-        uint256 initialSupply = 1000 * 10**decimals();
+    constructor() payable ERC20("StakeToken", "STN") {
+        uint256 initialSupply = 1000;
 
         _owner = payable(owner());
 
         // Mint the new set of tokens
-        _mint(msg.sender, initialSupply);
+        _mint(_owner, initialSupply);
     }
 
     function buyToken() public payable returns (bool) {
@@ -50,13 +50,6 @@ contract StakeToken is Ownable, ERC20 {
         // Calculate the amount ot of tokens to buy
         // Based on how much Ether was sent/paid
         uint256 amountToBuy = amount.mul(buyPrice);
-
-        // check if the Vendor Contract has enough amount of tokens for the transaction
-        uint256 vendorBalance = ERC20.balanceOf(address(this));
-        require(
-            vendorBalance >= amountToBuy,
-            "Vendor contract has not enough tokens in its balance"
-        );
 
         _mint(msg.sender, amountToBuy);
 
@@ -97,7 +90,8 @@ contract StakeToken is Ownable, ERC20 {
             block.timestamp + thresholdTime
         );
 
-        // Call the _burn function to deduct tokens from accounts
+        // Deduct tokens from accounts
+        // Call _burn() so token cannot be spent after staked.
         _burn(msg.sender, _stake);
 
         return true;
